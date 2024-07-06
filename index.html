@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encryption Site</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .button-container {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: #6200ea;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #3700b3;
+        }
+
+        .section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .text-input, .text-output {
+            width: 80%;
+            height: 100px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: 1px solid #6200ea;
+            border-radius: 4px;
+        }
+
+        .text-output {
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Encryption Site</h1>
+        <div class="button-container">
+            <button onclick="showEncrypt()" class="btn">Encrypt</button>
+            <button onclick="showDecrypt()" class="btn">Decrypt</button>
+        </div>
+        <div id="encrypt-section" class="section">
+            <h2>Encrypt</h2>
+            <textarea id="encrypt-input" class="text-input" placeholder="Enter text to encrypt"></textarea>
+            <button onclick="encryptText()" class="btn">Encrypt</button>
+            <textarea id="encrypt-output" class="text-output" readonly></textarea>
+            <button onclick="copyToClipboard('encrypt-output')" class="btn">Copy</button>
+        </div>
+        <div id="decrypt-section" class="section">
+            <h2>Decrypt</h2>
+            <textarea id="decrypt-input" class="text-input" placeholder="Enter text to decrypt"></textarea>
+            <button onclick="decryptText()" class="btn">Decrypt</button>
+            <textarea id="decrypt-output" class="text-output" readonly></textarea>
+            <button onclick="copyToClipboard('decrypt-output')" class="btn">Copy</button>
+        </div>
+    </div>
+    <script>
+        const encryptionTable = {
+            'A': '****<**<',
+            'B': '***<**<*',
+            'C': '**<***<*',
+            'D': '*<****<*',
+            'E': '******<<',
+            'F': '*****<**',
+            'G': '****<***',
+            'H': '***<****',
+            'I': '**<*****',
+            'J': '*<******',
+            'K': '><****<<',
+            'L': '<<***<<*',
+            'M': '***<<***',
+            'N': '**<<****',
+            'O': '*<<*****',
+            'P': '<<******',
+            'Q': '*>*<**><',
+            'R': '*>**<**<',
+            'S': '*>***<**',
+            'T': '*>****<*',
+            'U': '*>*****<',
+            'V': '*>>****<',
+            'W': '*>>>****',
+            'X': '*>>>>***',
+            'Y': '*>>>>>**',
+            'Z': '*>>>>>>*',
+            'a': '<<**>**>',
+            'b': '<<*>***<',
+            'c': '<<**<*>*',
+            'd': '<<***<*>',
+            'e': '<<****>*',
+            'f': '<**>***<',
+            'g': '<***>***',
+            'h': '<****>**',
+            'i': '<*****>*',
+            'j': '*****>**',
+            'k': '**>***><',
+            'l': '**>>**><',
+            'm': '**>>>*><',
+            'n': '**>>>>><',
+            'o': '*>>>>><>',
+            'p': '*>>>><><',
+            'q': '*>>>><<<',
+            'r': '*>>>><><',
+            's': '*>>>><<>',
+            't': '***<**><',
+            'u': '***<<*><',
+            'v': '***<<<><',
+            'w': '***<<<<>',
+            'x': '***<<<>*',
+            'y': '**<><<>*',
+            'z': '*<<><<>*',
+            '0': '><<><<>*',
+            '1': '<<><<><*',
+            '2': '<<><<>>*',
+            '3': '<<><<<<>',
+            '4': '<<><<<><',
+            '5': '<<><<>>>',
+            '6': '<<><><<>',
+            '7': '<<><>><>',
+            '8': '<<><>><<',
+            '9': '<<><>><>',
+            ' ': '><><><><'
+        };
+
+        const decryptionTable = Object.fromEntries(Object.entries(encryptionTable).map(([k, v]) => [v, k]));
+
+        function showEncrypt() {
+            document.getElementById('encrypt-section').style.display = 'block';
+            document.getElementById('decrypt-section').style.display = 'none';
+        }
+
+        function showDecrypt() {
+            document.getElementById('encrypt-section').style.display = 'none';
+            document.getElementById('decrypt-section').style.display = 'block';
+        }
+
+        function encryptText() {
+            const input = document.getElementById('encrypt-input').value;
+            let encryptedText = '';
+            for (let char of input) {
+                encryptedText += encryptionTable[char] || char;
+            }
+            document.getElementById('encrypt-output').value = encryptedText;
+        }
+
+        function decryptText() {
+            const input = document.getElementById('decrypt-input').value;
+            let decryptedText = '';
+            for (let i = 0; i < input.length; i += 8) {
+                const chunk = input.substring(i, i + 8);
+                decryptedText += decryptionTable[chunk] || chunk;
+            }
+            document.getElementById('decrypt-output').value = decryptedText;
+        }
+
+        function copyToClipboard(elementId) {
+            const copyText = document.getElementById(elementId);
+            copyText.select();
+            document.execCommand("copy");
+            alert("Copied to clipboard");
+        }
+    </script>
+</body>
+</html>
